@@ -1,18 +1,26 @@
 #include <Arduino.h>
-//test
-// put function declarations here:
-int myFunction(int, int);
+#include "Constants.h"
+#include "Stepper.h"
+
+
+// Create stepper motor objects
+Stepper guide(DIR_1_PIN, STP_1_PIN);
+Stepper spindle(DIR_2_PIN, STP_2_PIN);
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  
+  // Init motors
+  guide.initialize();
+  guide.setMicrosteps(GUIDE_MICROSTEPS);
+  spindle.initialize();
+  spindle.setMicrosteps(SPINDLE_MICROSTEPS);
+
+  // Test the spindle
+  spindle.moveTest();
+  // Home the linear guide
+  guide.setHome(GUIDE_RESET_PIN, 0);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-}
-
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
 }
