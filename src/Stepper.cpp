@@ -3,13 +3,14 @@
 #include "Constants.h"
 
 // Class constructor
-Stepper::Stepper(int _dirPin, int _stepPin) { 
+Stepper::Stepper(int _dirPin, int _stepPin, float _reductionRatio) { 
     mSteps = 1; // Microsteps, i.e. 1, 2, 4, 8, 16 etc.
     stepsPerRev = 200;
     timePerStep = 2000; // Delay per step (in microseconds)
     steps = 0; // Counter for the number of steps
     dirPin = _dirPin;
     stepPin = _stepPin;
+    reductionRatio = _reductionRatio;
 }
 
 void Stepper::initialize() {
@@ -21,8 +22,8 @@ void Stepper::initialize() {
 void Stepper::moveTest() {
     timePerStep = 2000;
     for (int i = 0; i < 3; i++) { // Perform tests at 3 diff speeds
-        spinRevs(1, HIGH);
-        spinRevs(1, LOW);
+        spinRevs(0.125, HIGH);
+        spinRevs(0.125, LOW);
         timePerStep -= 200;
         delay(200);
     }
@@ -48,12 +49,20 @@ void Stepper::setHome(int limitSwitch, bool direction) {
 }
 
 float Stepper::readRevs() {
-    return 1.0*steps/stepsPerRev;
+    return steps/(stepsPerRev*reductionRatio);
 }
 
 void Stepper::setMicrosteps(int microsteps) {
     mSteps = microsteps;
     stepsPerRev = mSteps*200;
+}
+
+void Stepper::setTimePerStep(int time) {
+    timePerStep = time;
+}
+
+void Stepper::resetSteps() {
+    steps = 0;
 }
 
 void Stepper::spinSteps(int nbOfSteps, bool direction) {
@@ -82,5 +91,10 @@ void Stepper::spinSteps(int nbOfSteps, bool direction) {
 }
 
 void Stepper::spinRevs(float nbOfTurns, bool direction) {
-    spinSteps(stepsPerRev*nbOfTurns, direction);
+    spinSteps(stepsPerRev*nbOfTurns*reductionRatio, direction);
+}
+
+void Stepper::moveDist(float dist_mm, bool direction) {
+    int tempSteps = (dist_mm/REVS_TO_DIST)*stepsPerRev;
+    spinSteps(tempSteps, direction);
 }

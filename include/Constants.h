@@ -2,15 +2,18 @@
 #define CONSTANTS_H
 
 // Misc
-const int WIRE_D = 0.8; // Wire diameter in mm
-const int CORE_W = 20.5; // Core width (height) in mm, (linear guide left-right travel distance)
-const int N_TURNS = 300; // Number of coil turns on the core
+const float WIRE_D = 0.4; // Wire diameter in mm
+const float CORE_W = 20.5; // Core width (height) in mm, (linear guide left-right travel distance)
+const float N_TURNS = 300; // Number of coil turns on the core
+const int SHORTEST_SPINDLE_DELAY = 800;
+const int LONGEST_SPINDLE_DELAY = 6000;
 
 // Motor info
 const int SPINDLE_MICROSTEPS = 1;
 const int GUIDE_MICROSTEPS = 32;
 
-const int REVS_TO_DIST = 40; // distance per full revolution of the guide motor (mm)
+const float REVS_TO_DIST = 40; // distance per full revolution of the guide motor (mm)
+const int SPINDLE_REDUCTION = 8; // Reduction ration for the spindle
 
 // Board inputs
 const int POT_PIN = 34;
